@@ -18,6 +18,7 @@ public interface IDao {
     List<Show> getAllShows();
     void updateShow(Show show);
     void deleteShow(int id);
+    Show getShowByTitle(String title);
 
     // Ticket operations
     void saveTicket(Ticket ticket);

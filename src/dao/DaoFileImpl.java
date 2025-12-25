@@ -21,6 +21,17 @@ public class DaoFileImpl implements IDao {
     }
 
     @Override
+    public Show getShowByTitle(String title) {
+        for (Show show : shows) {
+            // השוואה בין שמות המופעים (מתעלם מהבדלי אותיות גדולות/קטנות)
+            if (show.getTitle().equalsIgnoreCase(title)) {
+                return show;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public void saveCustomer(Customer customer) {
         if (customer != null) {
             // Check if customer already exists (update) or add new
