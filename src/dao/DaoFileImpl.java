@@ -7,17 +7,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DaoFileImpl implements IDao {
-    private static final String DATA_FILE = "datasource.txt";
+    private String filePath;
     
     private List<Customer> customers;
     private List<Show> shows;
     private List<Ticket> tickets;
 
-    public DaoFileImpl() {
+    public DaoFileImpl(String filePath) {
+        this.filePath = filePath;
         this.customers = new ArrayList<>();
         this.shows = new ArrayList<>();
         this.tickets = new ArrayList<>();
-        loadData();
+        loadData(); // טעינה מהנתיב שקיבלנו
+    }
+    public DaoFileImpl() {
+        this("datasource.txt");
     }
 
     @Override
@@ -168,7 +172,7 @@ public class DaoFileImpl implements IDao {
 
     @Override
     public void loadData() {
-        File file = new File(DATA_FILE);
+        File file = new File(filePath);
         if (!file.exists()) {
             // File doesn't exist yet, start with empty lists
             return;
@@ -196,7 +200,7 @@ public class DaoFileImpl implements IDao {
 
     @Override
     public void saveData() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(DATA_FILE))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
             // Write all data to the file
             oos.writeObject(customers);
             oos.writeObject(shows);
