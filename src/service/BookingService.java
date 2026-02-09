@@ -41,4 +41,12 @@ public class BookingService {
         }
         return null;
     }
+
+    public void bookTicket(Ticket ticket)
+    {
+        // קריאה ל-DAO כדי לשמור את הכרטיס החדש במקור הנתונים
+        dao.saveTicket(ticket);
+        // עדכון המופע במידת הצורך
+        dao.updateShow(ticket.getShow());
+    }
 }
