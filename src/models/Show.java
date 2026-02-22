@@ -14,6 +14,10 @@ public class Show implements Serializable {
     private String venue;
     private List<Seat> seats;
 
+    public Show() {
+        // No-arg constructor for JSON deserialization (GSON)
+    }
+
     public Show(int id, String title, String description, LocalDateTime showTime, String venue, List<Seat> seats) {
         this.id = id;
         this.title = title;

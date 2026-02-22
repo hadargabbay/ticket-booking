@@ -1,59 +1,52 @@
-import controllers.ControllerFactory;
-import controllers.IController;
-import service.BookingService;
-import dao.IDao;
+import controllers.ControllerRegistry;
 import dao.DaoFileImpl;
-import algorithms.IAlgoBooking;
+import dao.IDao;
 import algorithms.CheapestSeatAlgo;
-import models.Ticket;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
+import algorithms.IAlgoBooking;
+import server.RequestDispatcher;
+import server.Server;
+import service.BookingService;
 
+import java.util.Scanner;
+
+/**
+ * Application entry point for the ticket booking server.
+ * Wires dependencies, loads controllers at startup, and starts the Server.
+ */
 public class ServerDriver {
 
-    @SuppressWarnings("unchecked")
+    private static final int DEFAULT_PORT = 8080;
+
     public static void main(String[] args) {
         try {
+            // 1. Initialize DAO and algorithm
             IDao dao = new DaoFileImpl();
             IAlgoBooking algorithm = new CheapestSeatAlgo();
             BookingService bookingService = new BookingService(dao, algorithm);
-            IController<Ticket> ticketController = (IController<Ticket>) ControllerFactory.getController("TICKET", bookingService);
 
-            System.out.println("--- Server is starting ---");
+            // 2. Load controllers at startup (Factory Pattern)
+            ControllerRegistry controllerRegistry = new ControllerRegistry();
+            controllerRegistry.loadControllers(bookingService);
 
-            try (ServerSocket serverSocket = new ServerSocket(8080)) {
-                System.out.println("Server is listening on port 8080...");
+            // 3. Create request dispatcher (separation layer between network and services)
+            RequestDispatcher requestDispatcher = new RequestDispatcher(controllerRegistry);
 
-                while (true) {
-                    Socket clientSocket = serverSocket.accept();
-                    new Thread(() -> handleClient(clientSocket, ticketController)).start();
-                }
-            }
+            // 4. Create and start server
+            int port = args.length > 0 ? Integer.parseInt(args[0]) : DEFAULT_PORT;
+            Server server = new Server(port, requestDispatcher);
+
+            System.out.println("--- Ticket Booking Server starting ---");
+            server.start();
+            System.out.println("Server is ready. Press Enter to stop.");
+
+            // Wait for shutdown signal
+            new Scanner(System.in).nextLine();
+            server.stop();
+            System.out.println("Server stopped.");
+
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
-        }
-    }
-
-    private static void handleClient(Socket socket, IController<Ticket> controller) {
-        try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
-
-            Object obj = in.readObject();
-            if (obj instanceof Ticket) {
-                Ticket ticketRequest = (Ticket) obj;
-
-                //  קריאה ל-save ללא אחסון במשתנה כדי למנוע טעויות סוגים
-                controller.save(ticketRequest);
-
-                out.writeObject("Request processed successfully");
-            }
-            out.flush();
-        } catch (Exception e) {
-            System.err.println("Handler error: " + e.getMessage());
-        } finally {
-            try { socket.close(); } catch (Exception e) {}
+            e.printStackTrace();
         }
     }
 }

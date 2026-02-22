@@ -10,6 +10,10 @@ public class Customer implements Serializable {
     private String email;
     private String phone;
 
+    public Customer() {
+        // No-arg constructor for JSON deserialization (GSON)
+    }
+
     public Customer(int id, String name, String email, String phone) {
         this.id = id;
         this.name = name;

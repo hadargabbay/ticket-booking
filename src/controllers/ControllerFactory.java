@@ -2,20 +2,34 @@ package controllers;
 
 import service.BookingService;
 
-public class ControllerFactory
-{
+/**
+ * Factory for creating and loading controllers at application startup.
+ * Implements the Factory Pattern to load the appropriate controllers.
+ */
+public class ControllerFactory {
 
-    // מתודה סטטית לקבלת ה-Controller המתאים
+    /**
+     * Creates all known controllers and registers them in the registry.
+     * Called at application startup by ControllerRegistry.
+     */
+    public static void createAndRegister(ControllerRegistry registry, BookingService service) {
+        if (registry == null || service == null) {
+            return;
+        }
+        registry.register("TICKET", new TicketController(service));
+        // Add more controller types here as they are implemented
+    }
+
+    /**
+     * Creates a single controller by type (for backward compatibility).
+     */
     public static IController<?> getController(String type, BookingService service) {
-        if (type == null) {
+        if (type == null || service == null) {
             return null;
         }
-
         if (type.equalsIgnoreCase("TICKET")) {
             return new TicketController(service);
         }
-
         return null;
     }
-
 }

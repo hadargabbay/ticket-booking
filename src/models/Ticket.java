@@ -14,6 +14,10 @@ public class Ticket implements Serializable {
     private double price;
     private String status; // e.g., "CONFIRMED", "CANCELLED"
 
+    public Ticket() {
+        // No-arg constructor for JSON deserialization (GSON)
+    }
+
     public Ticket(int id, Customer customer, Show show, Seat seat, LocalDateTime bookingTime, double price, String status) {
         this.id = id;
         this.customer = customer;

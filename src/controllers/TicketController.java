@@ -40,4 +40,9 @@ public class TicketController implements IController<Ticket> {
     public List<Ticket> getAll() {
         return null; // ימומש בהמשך לפי הצורך
     }
+
+    @Override
+    public Ticket bookBestSeat(String showTitle, int customerId) {
+        return bookingService.bookBestSeat(showTitle, customerId);
+    }
 }

@@ -10,6 +10,10 @@ public class Seat implements Serializable {
     private double price;
     private boolean isAvailable;
 
+    public Seat() {
+        // No-arg constructor for JSON deserialization (GSON)
+    }
+
     public Seat(int row, int number, double price, boolean isAvailable) {
         this.row = row;
         this.number = number;
@@ -23,6 +27,9 @@ public class Seat implements Serializable {
     public double getPrice() { return price; }
     public boolean isAvailable() { return isAvailable; }
 
-    // Setter
+    // Setters (for GSON deserialization)
+    public void setRow(int row) { this.row = row; }
+    public void setNumber(int number) { this.number = number; }
+    public void setPrice(double price) { this.price = price; }
     public void setAvailable(boolean available) { isAvailable = available; }
 }
