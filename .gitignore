@@ -1,9 +1,0 @@
-.idea/
-target/
-out/
-*.iml
-*.class
-*.log
-mvnw
-mvnw.cmd
-.mvn/
