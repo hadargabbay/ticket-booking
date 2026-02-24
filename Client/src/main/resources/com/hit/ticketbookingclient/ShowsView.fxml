@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" spacing="15.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hit.ticketbookingclient.controllers.ShowsController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <Label text="Available Shows" textFill="#2c3e50">
+        <font>
+            <Font name="System Bold" size="24.0" />
+        </font>
+    </Label>
+
+    <TableView fx:id="showsTable" prefHeight="300.0" prefWidth="580.0">
+        <columns>
+            <TableColumn fx:id="idCol" prefWidth="40.0" text="ID" />
+            <TableColumn fx:id="titleCol" prefWidth="160.0" text="Title" />
+            <TableColumn fx:id="timeCol" prefWidth="130.0" text="Date &amp; Time" />
+            <TableColumn fx:id="venueCol" prefWidth="130.0" text="Venue" />
+            <TableColumn fx:id="ticketsCol" prefWidth="100.0" text="Tickets Sold" />
+        </columns>
+    </TableView>
+
+    <HBox spacing="15.0" alignment="CENTER">
+        <Button mnemonicParsing="false" onAction="#goToBookingView" style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold;" text="Back to Booking" prefWidth="140" prefHeight="35"/>
+        <Button mnemonicParsing="false" onAction="#loadShows" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;" text="Refresh Shows" prefWidth="140" prefHeight="35"/>
+        <Button mnemonicParsing="false" onAction="#toggleAdminMode" style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-weight: bold;" text="🔑 Admin Login" prefWidth="140" prefHeight="35"/>
+    </HBox>
+
+    <HBox fx:id="adminPanel" spacing="15.0" alignment="CENTER" visible="false" managed="false">
+        <Button mnemonicParsing="false" onAction="#resetShowByName" style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold;" text="Reset Show" prefWidth="130" prefHeight="30"/>
+        <Button mnemonicParsing="false" onAction="#deleteShowByName" style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-font-weight: bold;" text="Delete Show" prefWidth="130" prefHeight="30"/>
+        <Button mnemonicParsing="false" onAction="#addNewShow" style="-fx-background-color: #8e44ad; -fx-text-fill: white; -fx-font-weight: bold;" text="Add New Show" prefWidth="130" prefHeight="30"/>
+    </HBox>
+
+    <Label fx:id="statusLabel" text="" textFill="RED"/>
+</VBox>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" spacing="15.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hit.ticketbookingclient.controllers.MainController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <Label text="Ticket Booking System" textFill="#2c3e50">
+        <font>
+            <Font name="System Bold" size="24.0" />
+        </font>
+    </Label>
+
+    <VBox spacing="5.0" maxWidth="300">
+        <Label text="Show Title (e.g., Maccabi vs Hapoel):" />
+        <TextField fx:id="showTitleField" promptText="Enter show title" />
+    </VBox>
+
+    <VBox spacing="5.0" maxWidth="300">
+        <Label text="Customer Name:" />
+        <TextField fx:id="customerNameField" promptText="Enter your name" />
+    </VBox>
+
+    <VBox spacing="5.0" maxWidth="300">
+        <Label text="Ticket Type Preference:" />
+        <ComboBox fx:id="algoComboBox" prefWidth="300" promptText="Select Preference">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Cheapest Seat" />
+                    <String fx:value="First Available Seat" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+    </VBox>
+
+    <VBox spacing="5.0" maxWidth="300">
+        <Label text="Number of Tickets:" />
+        <TextField fx:id="amountField" promptText="Enter amount (e.g., 2)" />
+    </VBox>
+
+    <HBox spacing="15.0" alignment="CENTER">
+        <Button fx:id="bookButton" mnemonicParsing="false" onAction="#handleBookSeat" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;" text="Book Tickets!" prefWidth="140" prefHeight="40"/>
+        <Button mnemonicParsing="false" onAction="#goToShowsView" style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold;" text="View All Shows" prefWidth="140" prefHeight="40"/>
+    </HBox>
+
+    <Label fx:id="statusLabel" text="" wrapText="true" maxWidth="300" textAlignment="CENTER">
+        <font>
+            <Font size="14.0" />
+        </font>
+    </Label>
+</VBox>
