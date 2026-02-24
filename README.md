@@ -1,91 +1,38 @@
-# Ticket booking system project
+# Ticket Booking System
+A complete Client-Server Java application for booking show tickets. 
 
-A Java-based system for booking show tickets. Supports managing customers, shows, and different ways to choose seats.
+##  System Overview
 
-## Main Features
+The system is built using a modern **Client-Server architecture** communicating over TCP Sockets using JSON serialization (GSON). 
 
-- **Seat Selection:** Choose between "Cheapest Seat" or "First Available" algorithms.
-- **File Storage:** Data (shows, tickets, customers) is saved to `datasource.txt`.
-- **Automatic Pricing:** Front-row premium, middle regular, back-row discount.
-- **New Customer Setup:** Create a profile when booking with a new customer ID.
-- **JSON API Server:** TCP server exposing booking operations over JSON (port 8080).
+* **The Server** handles business logic, algorithms, multithreaded client requests, and data persistence.
+* **The Client** provides a rich, loosely coupled Graphical User Interface (GUI) built with JavaFX, strictly following the MVC architecture.
 
-## Project Structure
+##  Key Features & Bonuses
 
-| Package / File | Purpose |
-|----------------|---------|
-| `models/` | Domain objects: Seat, Show, Customer, Ticket |
-| `dao/` | File-based persistence (read/write) |
-| `service/` | Booking logic + algorithm integration |
-| `algorithms/` | Seat selection strategies |
-| `controllers/` | Separation layer between network and BookingService; ControllerFactory loads controllers at startup |
-| `dto/` | Request/Response objects for the JSON API |
-| `json/` | GSON-based serialization (JsonManager, LocalDateTimeAdapter) |
-| `server/` | Server class, RequestDispatcher |
-| `Main.java` | CLI menu |
-| `ServerDriver.java` | Server entry point |
+* **Seat Selection Algorithms (Strategy Pattern):** Users can dynamically choose between "Cheapest Seat" or "First Available" algorithms.
+* **Atomic Transactions (Rollback):** If a user initiates a booking but cancels at the payment screen, a `CANCEL_BOOKING` request is instantly sent to the server to free the locked seats.
+* **Admin Mode:** A hidden, password-protected admin panel (`Password: admin123`) allowing administrators to soft-reset shows or hard-delete them.
+* **Factory & Registry Patterns:** Controllers on the server are dynamically loaded and managed via a Controller Registry.
+* **Persistent Storage:** All data (shows, tickets, customers) is safely serialized and saved to `datasource.txt`.
 
-## Setup
+##  Project Structure
 
-### Prerequisites
+The repository is organized into a Monorepo containing two separate Maven projects:
 
-- Java 17+
-- Maven 3.x (for command-line build)
+* `/Server` - Contains the Java backend, Models, DAOs, Services, Controllers, and JUnit Tests.
+* `/Client` - Contains the JavaFX application, Network Singleton Manager, Views (FXML), and UI Controllers.
 
-### Build
+##  How to Run the Application
 
-```bash
-mvn compile
-```
+To experience the full system, you must run both the Server and the Client.
 
-### Run
+### Step 1: Start the Server
+1. Open the `/Server` project in your IDE (IntelliJ / Eclipse).
+2. Navigate to `src/main/java/ServerDriver.java` and run it.
+3. The server will start listening on port `8080`.
 
-**CLI mode:**
-```bash
-mvn exec:java -Dexec.mainClass="Main"
-```
-Or run `Main.java` from your IDE.
-
-**Server mode:**
-```bash
-mvn exec:java -Dexec.mainClass="ServerDriver"
-```
-Default port: 8080. Custom port: `mvn exec:java -Dexec.mainClass="ServerDriver" -Dexec.args="9090"`. Press Enter to stop the server.
-
-**Test client (against running server):**
-```bash
-mvn exec:java -Dexec.mainClass="client.TestClient"
-```
-
-> **Tip:** Run `Main` once to initialize sample shows and customers in `datasource.txt` before testing the server.
-
-### Dependencies
-
-Managed by Maven (`pom.xml`):
-
-- GSON 2.10.1 – JSON serialization
-- JUnit 5 – Tests
-
-## How to Use
-
-### CLI (Main.java)
-
-1. Run `Main.java`.
-2. Use the menu to view shows and prices.
-3. Choose a booking algorithm (options 3 or 4).
-4. Enter show name and customer ID to book.
-5. Exit with option 6 to save data.
-
-### JSON API (ServerDriver)
-
-Request format (one JSON object per line):
-
-```json
-{"action":"BOOK_BEST_SEAT","payload":{"showTitle":"Maccabi vs Hapoel","customerId":1}}
-```
-
-Response format:
-
-```json
-{"success":true,"message":"Best seat booked successfully","data":{...ticket...}}
-```
+### Step 2: Start the Client
+1. Open the `/Client` project in your IDE.
+2. Navigate to `src/main/java/com/hit/ticketbookingclient/ClientDriver.java` and run it.
+3. The JavaFX GUI will launch, fetch the live data from the server, and you can start booking tickets!
