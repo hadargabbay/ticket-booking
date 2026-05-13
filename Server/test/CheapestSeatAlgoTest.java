@@ -7,6 +7,9 @@ import algorithms.CheapestSeatAlgo;
 
 class CheapestSeatAlgoTest {
 
+    /**
+     * Checks that the algorithm returns the lowest-priced seat that is still available.
+     */
     @Test
     void testFindBestSeat_returnsCheapest() {
         CheapestSeatAlgo algo = new CheapestSeatAlgo();
@@ -23,6 +26,9 @@ class CheapestSeatAlgoTest {
         assertEquals(50.0, result.getPrice(), "the algorithm should return the cheapest seat price 50.0");
     }
 
+    /**
+     * Checks that when every seat is taken the algorithm returns null instead of a seat.
+     */
     @Test
     void testFindBestSeat_whenNoneAvailable() {
         CheapestSeatAlgo algo = new CheapestSeatAlgo();

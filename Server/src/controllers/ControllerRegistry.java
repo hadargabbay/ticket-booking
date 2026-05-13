@@ -13,7 +13,7 @@ public class ControllerRegistry {
     private final Map<String, IController<?>> controllers = new ConcurrentHashMap<>();
 
     /**
-     * Register a controller for the given type.
+     * Stores a controller under a short name (for example SHOW or TICKET) so the dispatcher can find it later.
      */
     public void register(String type, IController<?> controller) {
         if (type != null && controller != null) {
@@ -22,15 +22,14 @@ public class ControllerRegistry {
     }
 
     /**
-     * Retrieve a controller by type.
+     * Looks up the controller that was registered for this type string, or returns null if none exists.
      */
     public IController<?> getController(String type) {
         return type == null ? null : controllers.get(type.toUpperCase());
     }
 
     /**
-     * Initialize the registry with all known controllers.
-     * Called at application startup.
+     * Fills the registry with every controller the server knows about, using the shared booking service.
      */
     public void loadControllers(BookingService bookingService) {
         ControllerFactory.createAndRegister(this, bookingService);

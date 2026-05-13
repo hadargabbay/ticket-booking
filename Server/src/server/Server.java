@@ -10,10 +10,8 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * TCP server that listens for incoming JSON requests.
- * Runs the accept loop on a dedicated thread and handles each client on a separate thread.
- */
+// TCP server that listens for incoming JSON requests.
+// Runs the accept loop on a dedicated thread and handles each client on a separate thread.
 public class Server {
     private final int port;
     private final RequestDispatcher requestDispatcher;
@@ -23,16 +21,14 @@ public class Server {
     private ExecutorService clientExecutor;
     private volatile boolean running;
 
+    // Creates a server that will listen on the given port and route work through the dispatcher.
     public Server(int port, RequestDispatcher requestDispatcher) {
         this.port = port;
         this.requestDispatcher = requestDispatcher;
         this.jsonManager = JsonManager.getInstance();
     }
 
-    /**
-     * Start the server. Binds to the configured port and begins accepting connections
-     * on a separate thread.
-     */
+    // Opens the listening port and starts a background thread that accepts clients; each client is handled on its own thread.
     public void start() throws IOException {
         serverSocket = new ServerSocket(port);
         running = true;
@@ -55,9 +51,7 @@ public class Server {
         acceptThread.start();
     }
 
-    /**
-     * Stop the server gracefully.
-     */
+    // Stops accepting new clients, shuts down the thread pool, and closes the listening socket.
     public void stop() {
         running = false;
         if (clientExecutor != null) {
@@ -79,14 +73,17 @@ public class Server {
         }
     }
 
+    // Returns the TCP port this server is configured to use.
     public int getPort() {
         return port;
     }
 
+    // Tells whether the accept loop is still marked as running.
     public boolean isRunning() {
         return running;
     }
 
+    // Handles one client connection: reads one JSON line, runs it through the dispatcher, sends the JSON reply, then closes.
     private void handleClient(Socket socket) {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true)) {
@@ -116,6 +113,7 @@ public class Server {
         }
     }
 
+    // Writes one JSON line (the API response) to the client socket.
     private void sendResponse(PrintWriter out, ApiResponse response) {
         String json = jsonManager.toJson(response);
         out.println(json);

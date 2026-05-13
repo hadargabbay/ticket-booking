@@ -10,17 +10,19 @@ import java.io.*;
 import java.net.Socket;
 import java.time.LocalDateTime;
 
-// Handles all socket communication
+// Single place that opens a socket to the server and turns requests into JSON and back.
 public class NetworkClient {
     private static NetworkClient instance;
     private final String serverAddress = "localhost";
     private final int serverPort = 8080;
     private final Gson gson;
 
+    // Prepares Gson so dates in JSON match the server's format.
     private NetworkClient() {
         this.gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
     }
 
+    // Returns the one shared client used everywhere in the UI.
     public static NetworkClient getInstance() {
         if (instance == null) {
             instance = new NetworkClient();
@@ -28,7 +30,7 @@ public class NetworkClient {
         return instance;
     }
 
-    // Opens a socket connection, sends a JSON request, and waits for the server's response
+    // Sends one API request to the server and waits for one JSON response (or an error wrapper if something fails).
     public ApiResponse sendRequest(ApiRequest request) {
         try (Socket socket = new Socket(serverAddress, serverPort);
              PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
@@ -52,6 +54,8 @@ public class NetworkClient {
         }
         return ApiResponse.error("No response from server.");
     }
+
+    /** Exposes the same Gson instance the network layer uses so UI code can build payloads consistently. */
     public Gson getGson() {
         return gson;
     }

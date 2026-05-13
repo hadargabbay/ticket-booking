@@ -13,6 +13,9 @@ import java.io.IOException;
  */
 public class ClientDriver extends Application {
 
+    /**
+     * Builds the first window: loads the main booking FXML and shows it on the stage.
+     */
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ClientDriver.class.getResource("/com/hit/ticketbookingclient/MainView.fxml"));
@@ -23,6 +26,7 @@ public class ClientDriver extends Application {
         stage.show();
     }
 
+    /** JavaFX entry point: hands control to the toolkit which then calls {@link #start(Stage)}. */
     public static void main(String[] args) {
         launch(args);
     }

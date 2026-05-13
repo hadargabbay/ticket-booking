@@ -13,11 +13,13 @@ import java.time.format.DateTimeFormatter;
 public class LocalDateTimeAdapter implements JsonSerializer<LocalDateTime>, JsonDeserializer<LocalDateTime> {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
+    /** Turns a date-time into a JSON string the client can read. */
     @Override
     public JsonElement serialize(LocalDateTime src, Type typeOfSrc, JsonSerializationContext context) {
         return src == null ? com.google.gson.JsonNull.INSTANCE : new JsonPrimitive(src.format(FORMATTER));
     }
 
+    /** Reads a JSON string back into a Java date-time for the app to use. */
     @Override
     public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {

@@ -7,6 +7,9 @@ import algorithms.FirstAvailableAlgo;
 
 class FirstAvailableAlgoTest {
 
+    /**
+     * Checks that the first free seat in order is returned even if a cheaper seat appears later.
+     */
     @Test
     void testFindBestSeat_returnsFirstAvailable() {
         FirstAvailableAlgo algo = new FirstAvailableAlgo();
@@ -22,6 +25,9 @@ class FirstAvailableAlgoTest {
         assertEquals(2, result.getNumber(), "the algorithm should return seat number 2");
     }
 
+    /**
+     * Checks that a full house yields no seat selection.
+     */
     @Test
     void testFindBestSeat_whenNoneAvailable() {
         FirstAvailableAlgo algo = new FirstAvailableAlgo();
@@ -37,6 +43,9 @@ class FirstAvailableAlgoTest {
         assertNull(result, "if there are no available seats, the result should be null");
     }
 
+    /**
+     * Checks that an empty seat list returns null safely.
+     */
     @Test
     void testFindBestSeat_withEmptyList() {
         FirstAvailableAlgo algo = new FirstAvailableAlgo();

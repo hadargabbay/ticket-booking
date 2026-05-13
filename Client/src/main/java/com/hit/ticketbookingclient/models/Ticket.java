@@ -3,9 +3,10 @@ package com.hit.ticketbookingclient.models;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/** One booking linking a customer, show, seat, price, and time as shown in the UI or JSON. */
 public class Ticket implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     private int id;
     private Customer customer;
     private Show show;
@@ -14,10 +15,12 @@ public class Ticket implements Serializable {
     private double price;
     private String status; // e.g., "CONFIRMED", "CANCELLED"
 
+    /** Empty constructor so JSON from the server can fill this object. */
     public Ticket() {
         // No-arg constructor for JSON deserialization (GSON)
     }
 
+    /** Creates a ticket with every field set. */
     public Ticket(int id, Customer customer, Show show, Seat seat, LocalDateTime bookingTime, double price, String status) {
         this.id = id;
         this.customer = customer;
@@ -28,64 +31,77 @@ public class Ticket implements Serializable {
         this.status = status;
     }
 
-    // Getters
+    /** Returns the ticket id. */
     public int getId() {
         return id;
     }
 
+    /** Returns who bought the ticket. */
     public Customer getCustomer() {
         return customer;
     }
 
+    /** Returns which show this ticket is for. */
     public Show getShow() {
         return show;
     }
 
+    /** Returns which seat was booked. */
     public Seat getSeat() {
         return seat;
     }
 
+    /** Returns when the booking was made. */
     public LocalDateTime getBookingTime() {
         return bookingTime;
     }
 
+    /** Returns the price charged for this ticket. */
     public double getPrice() {
         return price;
     }
 
+    /** Returns the booking status string. */
     public String getStatus() {
         return status;
     }
 
-    // Setters
+    /** Updates the ticket id. */
     public void setId(int id) {
         this.id = id;
     }
 
+    /** Updates the customer reference. */
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
+    /** Updates the show reference. */
     public void setShow(Show show) {
         this.show = show;
     }
 
+    /** Updates the seat reference. */
     public void setSeat(Seat seat) {
         this.seat = seat;
     }
 
+    /** Updates the booking timestamp. */
     public void setBookingTime(LocalDateTime bookingTime) {
         this.bookingTime = bookingTime;
     }
 
+    /** Updates the stored price. */
     public void setPrice(double price) {
         this.price = price;
     }
 
+    /** Updates the status text. */
     public void setStatus(String status) {
         this.status = status;
     }
 
+    /** Builds a short text summary useful for debugging. */
     @Override
     public String toString() {
         return "Ticket{" +

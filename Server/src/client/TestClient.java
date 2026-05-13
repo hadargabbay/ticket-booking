@@ -14,6 +14,9 @@ import java.util.Scanner;
  *   BOOK_TICKET: (requires full Ticket object in payload)
  */
 public class TestClient {
+    /**
+     * Connects to the booking server, then loops: you type one JSON line per request and see the JSON reply.
+     */
     public static void main(String[] args) throws IOException {
         String host = args.length > 0 ? args[0] : "localhost";
         int port = args.length > 1 ? Integer.parseInt(args[1]) : 8080;

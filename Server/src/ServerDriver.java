@@ -17,6 +17,10 @@ public class ServerDriver {
 
     private static final int DEFAULT_PORT = 8080;
 
+    /**
+     * Starts the ticket server: loads storage, booking logic, controllers, then listens for clients.
+     * Waits for Enter in the console to shut down cleanly.
+     */
     public static void main(String[] args) {
         try {
             // 1. Initialize DAO and algorithm

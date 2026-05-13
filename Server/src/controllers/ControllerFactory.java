@@ -9,8 +9,7 @@ import service.BookingService;
 public class ControllerFactory {
 
     /**
-     * Creates all known controllers and registers them in the registry.
-     * Called at application startup by ControllerRegistry.
+     * Builds the default show and ticket controllers and saves them in the registry under fixed names.
      */
     public static void createAndRegister(ControllerRegistry registry, BookingService service) {
         if (registry == null || service == null) {
@@ -22,7 +21,7 @@ public class ControllerFactory {
     }
 
     /**
-     * Creates a single controller by type (for backward compatibility).
+     * Builds just one controller instance by type name (only TICKET is supported here today).
      */
     public static IController<?> getController(String type, BookingService service) {
         if (type == null || service == null) {

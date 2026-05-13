@@ -24,11 +24,17 @@ public class MainController {
     @FXML private Button bookButton;
     @FXML private Label statusLabel;
 
+    /**
+     * Runs when the booking screen opens: picks a default item in the algorithm dropdown.
+     */
     @FXML
     public void initialize() {
         if (algoComboBox != null) algoComboBox.getSelectionModel().selectFirst();
     }
 
+    /**
+     * Sends BOOK_BEST_SEAT to the server; on success opens a fake payment dialog, or cancels seats if the user backs out.
+     */
     @FXML
     public void handleBookSeat() {
         String showTitle = showTitleField.getText();
@@ -99,6 +105,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Switches the window to the shows table so the user can browse events.
+     */
     @FXML
     public void goToShowsView(javafx.event.ActionEvent event) {
         try {
@@ -114,6 +123,7 @@ public class MainController {
         }
     }
 
+    /** Shows a short colored message under the form (green for OK, red for problems). */
     private void showStatus(String message, boolean isSuccess) {
         statusLabel.setText(message);
         statusLabel.setTextFill(isSuccess ? Color.GREEN : Color.RED);

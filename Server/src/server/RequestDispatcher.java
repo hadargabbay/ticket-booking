@@ -11,19 +11,21 @@ import models.Ticket;
 import models.Show;
 import java.util.List;
 
-/**
- * Dispatches incoming API requests to the appropriate controller
- * based on the action type.
- */
+
+// Dispatches incoming API requests to the appropriate controller
+// based on the action type.
+
 public class RequestDispatcher {
     private final ControllerRegistry controllerRegistry;
     private final JsonManager jsonManager;
 
+    // Stores the registry used to look up controllers for each API action.
     public RequestDispatcher(ControllerRegistry controllerRegistry) {
         this.controllerRegistry = controllerRegistry;
         this.jsonManager = JsonManager.getInstance();
     }
 
+    // Picks the right handler from the request action name and returns a success or error response.
     public ApiResponse dispatch(ApiRequest request) {
         if (request == null || request.getAction() == null) {
             return ApiResponse.error("Invalid request: missing action");
@@ -56,6 +58,7 @@ public class RequestDispatcher {
         }
     }
 
+    // Saves a full ticket object sent by the client (BOOK_TICKET action).
     private ApiResponse handleBookTicket(JsonElement payload) {
         if (payload == null) return ApiResponse.error("Missing payload for BOOK_TICKET");
         IController<Ticket> controller = (IController<Ticket>) controllerRegistry.getController("TICKET");
@@ -65,7 +68,8 @@ public class RequestDispatcher {
         boolean success = result != null && result.startsWith("SUCCESS");
         return success ? ApiResponse.success(result) : ApiResponse.error(result);
     }
-    // Processes seat booking requests
+
+    // Books one or more seats using the chosen algorithm and customer name (BOOK_BEST_SEAT action).
     private ApiResponse handleBookBestSeat(JsonElement payload) {
         if (payload == null) return ApiResponse.error("Missing payload for BOOK_BEST_SEAT");
         TicketController controller = (TicketController) controllerRegistry.getController("TICKET");
@@ -82,7 +86,8 @@ public class RequestDispatcher {
         JsonElement data = jsonManager.getGson().toJsonTree(tickets);
         return ApiResponse.success("Successfully booked " + tickets.size() + " tickets", data);
     }
-    // show available shows
+
+    // Returns every show in the system so the client can display the list (GET_ALL_SHOWS action).
     private ApiResponse handleGetAllShows() {
         IController<Show> controller = (IController<Show>) controllerRegistry.getController("SHOW");
         if (controller == null) return ApiResponse.error("Show controller not available");
@@ -90,7 +95,8 @@ public class RequestDispatcher {
         JsonElement data = jsonManager.getGson().toJsonTree(shows);
         return ApiResponse.success("Shows retrieved", data);
     }
-    // Adds a new show to the system
+
+    // Creates or updates a show from JSON sent by an admin (ADD_SHOW action).
     private ApiResponse handleAddShow(JsonElement payload) {
         if (payload == null) return ApiResponse.error("Missing payload for ADD_SHOW");
         IController<Show> controller = (IController<Show>) controllerRegistry.getController("SHOW");
@@ -100,7 +106,8 @@ public class RequestDispatcher {
         boolean success = result != null && result.startsWith("SUCCESS");
         return success ? ApiResponse.success(result) : ApiResponse.error(result);
     }
-    // when user cancle payment
+
+    // Undoes a pending booking by freeing seats for each ticket in the JSON array (CANCEL_BOOKING action).
     private ApiResponse handleCancelBooking(JsonElement payload) {
         if (payload == null || !payload.isJsonArray()) {
             return ApiResponse.error("Invalid payload for cancellation");
@@ -116,7 +123,8 @@ public class RequestDispatcher {
         }
         return ApiResponse.success("Booking cancelled and seats released", null);
     }
-    // Reset a show
+
+    // Clears all tickets for a show and marks every seat as free again (RESET_SHOW action).
     private ApiResponse handleResetShow(JsonElement payload) {
         if (payload == null) return ApiResponse.error("Missing show title");
         TicketController controller = (TicketController) controllerRegistry.getController("TICKET");
@@ -125,7 +133,8 @@ public class RequestDispatcher {
         controller.resetShow(showTitle);
         return ApiResponse.success("Show reset successfully", null);
     }
-    // delete a show
+
+    // Permanently removes a show and its tickets by title (DELETE_SHOW action).
     private ApiResponse handleDeleteShow(JsonElement payload) {
         if (payload == null) return ApiResponse.error("Missing show title");
         TicketController controller = (TicketController) controllerRegistry.getController("TICKET");

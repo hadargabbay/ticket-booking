@@ -6,18 +6,18 @@ import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-/**
- * GSON TypeAdapter for java.time.LocalDateTime.
- * Serializes/deserializes using ISO-8601 format.
- */
+// GSON TypeAdapter for java.time.LocalDateTime.
+// Serializes/deserializes using ISO-8601 format.
 public class LocalDateTimeAdapter implements JsonSerializer<LocalDateTime>, JsonDeserializer<LocalDateTime> {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
+    // Turns a date-time into a JSON string for requests and responses.
     @Override
     public JsonElement serialize(LocalDateTime src, Type typeOfSrc, JsonSerializationContext context) {
         return src == null ? JsonNull.INSTANCE : new JsonPrimitive(src.format(FORMATTER));
     }
 
+    // Reads a JSON string from the server back into a Java date-time.
     @Override
     public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {

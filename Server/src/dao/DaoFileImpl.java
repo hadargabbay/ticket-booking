@@ -6,24 +6,29 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Saves all data in one binary file using Java serialization. */
 public class DaoFileImpl implements IDao {
     private String filePath;
-    
+
     private List<Customer> customers;
     private List<Show> shows;
     private List<Ticket> tickets;
 
+    // Opens storage at a custom path and tries to load existing data from disk.
     public DaoFileImpl(String filePath) {
         this.filePath = filePath;
         this.customers = new ArrayList<>();
         this.shows = new ArrayList<>();
         this.tickets = new ArrayList<>();
-        loadData(); // טעינה מהנתיב שקיבלנו
+        loadData();
     }
+
+    // Uses the default file name {@code datasource.txt} in the working directory.
     public DaoFileImpl() {
         this("datasource.txt");
     }
-    // get a show by title
+
+    /** Finds the first show whose title matches, ignoring case differences. */
     @Override
     public Show getShowByTitle(String title) {
         for (Show show : shows) {
@@ -33,7 +38,8 @@ public class DaoFileImpl implements IDao {
         }
         return null;
     }
-    // Adds or updates a customer
+
+    // Inserts a new customer or updates an existing one with the same id, then saves the file.
     @Override
     public void saveCustomer(Customer customer) {
         if (customer != null) {
@@ -53,6 +59,7 @@ public class DaoFileImpl implements IDao {
         }
     }
 
+    // Returns the customer with the given id, or null if not found.
     @Override
     public Customer getCustomer(int id) {
         for (Customer customer : customers) {
@@ -63,22 +70,26 @@ public class DaoFileImpl implements IDao {
         return null;
     }
 
+    // Returns a defensive copy of the customer list.
     @Override
     public List<Customer> getAllCustomers() {
         return new ArrayList<>(customers);
     }
 
+    // Delegates to saveCustomer so updates stay consistent.
     @Override
     public void updateCustomer(Customer customer) {
         saveCustomer(customer);
     }
 
+    // Removes a customer by id and saves the file.
     @Override
     public void deleteCustomer(int id) {
         customers.removeIf(customer -> customer.getId() == id);
         saveData();
     }
-    // Adds or updates a show
+
+    // Inserts a new show or updates an existing one with the same id, then saves the file.
     @Override
     public void saveShow(Show show) {
         if (show != null) {
@@ -98,6 +109,7 @@ public class DaoFileImpl implements IDao {
         }
     }
 
+    // Returns the show with the given id, or null if not found.
     @Override
     public Show getShow(int id) {
         for (Show show : shows) {
@@ -108,22 +120,26 @@ public class DaoFileImpl implements IDao {
         return null;
     }
 
+    // Returns a defensive copy of the show list.
     @Override
     public List<Show> getAllShows() {
         return new ArrayList<>(shows);
     }
 
+    // Delegates to saveShow so updates stay consistent.
     @Override
     public void updateShow(Show show) {
         saveShow(show);
     }
 
+    // Removes a show by id and saves the file.
     @Override
     public void deleteShow(int id) {
         shows.removeIf(show -> show.getId() == id);
         saveData();
     }
-    // Adds or updates a ticket
+
+    // Inserts a new ticket or updates an existing one with the same id, then saves the file.
     @Override
     public void saveTicket(Ticket ticket) {
         if (ticket != null) {
@@ -142,6 +158,8 @@ public class DaoFileImpl implements IDao {
             saveData();
         }
     }
+
+    // Returns the ticket with the given id, or null if not found.
     @Override
     public Ticket getTicket(int id) {
         for (Ticket ticket : tickets) {
@@ -151,19 +169,27 @@ public class DaoFileImpl implements IDao {
         }
         return null;
     }
+
+    // Returns a defensive copy of the ticket list.
     @Override
     public List<Ticket> getAllTickets() {
         return new ArrayList<>(tickets);
     }
+
+    // Delegates to saveTicket so updates stay consistent.
     @Override
     public void updateTicket(Ticket ticket) {
         saveTicket(ticket);
     }
+
+    // Removes a ticket by id and saves the file.
     @Override
     public void deleteTicket(int id) {
         tickets.removeIf(ticket -> ticket.getId() == id);
         saveData();
     }
+
+    // Reads the binary file into the three lists; starts empty if the file is missing or unreadable.
     @Override
     public void loadData() {
         File file = new File(filePath);
@@ -189,6 +215,8 @@ public class DaoFileImpl implements IDao {
             tickets = new ArrayList<>();
         }
     }
+
+    // Writes customers, shows, and tickets to the binary file in one shot.
     @Override
     public void saveData() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
@@ -202,15 +230,18 @@ public class DaoFileImpl implements IDao {
             e.printStackTrace();
         }
     }
+
+    // Removes any show whose title matches, ignoring case, then saves.
     @Override
     public void deleteShowByTitle(String title) {
         shows.removeIf(show -> show.getTitle().equalsIgnoreCase(title));
         saveData();
     }
+
+    // Removes tickets whose linked show has the given title (ignoring case), then saves.
     @Override
     public void deleteTicketsByShowTitle(String title) {
         tickets.removeIf(ticket -> ticket.getShow().getTitle().equalsIgnoreCase(title));
         saveData();
     }
 }
-

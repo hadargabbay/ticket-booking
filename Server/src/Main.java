@@ -16,6 +16,9 @@ import java.util.Scanner;
  * Manages system initialization, data persistence, and manual testing operations.
  */
 public class Main {
+    /**
+     * Runs the text menu: list shows, book tickets, switch seat algorithms, reset data, or save and exit.
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         IDao dao = new DaoFileImpl();
@@ -133,8 +136,7 @@ public class Main {
     }
 
     /**
-     * Initializes the database with predefined mock data.
-     * Generates shows with specific dates, times, and dynamic seating arrays.
+     * Fills empty storage with sample shows, seats, and a default customer so the app has data to work with.
      */
     private static void initData(IDao dao) {
         // Soccer Game - Scheduled for 20:30
@@ -156,10 +158,7 @@ public class Main {
     }
 
     /**
-     * Helper method to generate seats for a show with dynamic pricing.
-     * - First 5 seats: Premium price (x2)
-     * - Last 5 seats: Discounted price (x0.8)
-     * - Middle seats: Base price
+     * Builds a list of seats for one show: front rows cost more, back rows less, middle stays at the base price.
      */
     private static List<Seat> createSeats(int count, double basePrice) {
         List<Seat> seats = new ArrayList<>();

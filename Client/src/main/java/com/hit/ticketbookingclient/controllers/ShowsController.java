@@ -30,6 +30,7 @@ public class ShowsController {
     @FXML private Label statusLabel;
     @FXML private javafx.scene.layout.HBox adminPanel;
 
+    // Prepares the shows table columns and loads live data from the server the first time.
     @FXML
     public void initialize() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -56,6 +57,7 @@ public class ShowsController {
         loadShows();
     }
 
+    // Asks the server for GET_ALL_SHOWS and fills the table, or shows an error in the status label.
     @FXML
     public void loadShows() {
         statusLabel.setText("Loading shows from server...");
@@ -77,6 +79,7 @@ public class ShowsController {
         }
     }
 
+    // Returns to the main booking screen from the shows list.
     @FXML
     public void goToBookingView(javafx.event.ActionEvent event) {
         try {
@@ -92,6 +95,7 @@ public class ShowsController {
         }
     }
 
+    // Hides the admin bar or asks for a password and reveals admin tools when the password is correct.
     @FXML
     public void toggleAdminMode() {
         if (adminPanel.isVisible()) {
@@ -120,6 +124,7 @@ public class ShowsController {
         }
     }
 
+    // Asks for a show title and tells the server to RESET_SHOW (free all seats and drop tickets for that show).
     @FXML
     public void resetShowByName() {
         javafx.scene.control.TextInputDialog dialog = new javafx.scene.control.TextInputDialog();
@@ -144,6 +149,7 @@ public class ShowsController {
         }
     }
 
+    // Parses admin input and sends ADD_SHOW so a new event appears in the table after a successful save.
     @FXML
     public void addNewShow() {
         javafx.scene.control.TextInputDialog dialog = new javafx.scene.control.TextInputDialog("New Concert,Tel Aviv,25/12/2026 20:30,50,150.0");
@@ -200,6 +206,7 @@ public class ShowsController {
         }
     }
 
+    // Asks for confirmation input and sends DELETE_SHOW to remove a show and its tickets completely.
     @FXML
     public void deleteShowByName() {
         javafx.scene.control.TextInputDialog dialog = new javafx.scene.control.TextInputDialog();
