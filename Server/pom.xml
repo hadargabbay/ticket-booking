@@ -31,6 +31,9 @@
     </dependencies>
 
     <build>
+        <!-- Sources live under src/ and test/ (not src/main/java); tell Maven so compile/run find classes like ServerDriver. -->
+        <sourceDirectory>src</sourceDirectory>
+        <testSourceDirectory>test</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
